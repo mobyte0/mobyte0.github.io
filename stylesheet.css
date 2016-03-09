@@ -1,6 +1,5 @@
 p {
   font-family: "courier new";
-  line-height: 20%;
 }
 
 #title {
@@ -10,10 +9,14 @@ p {
 
 #side {
   padding-left: 25%;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 #tabbed {
   padding-left: 30%;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 #footer {

@@ -1,0 +1,24 @@
+Current Thoughts on Computer Club
+
+This Thursday, Computer Club at Western Michigan University is having elections coming up to vote in the next people that will be the officers for Computer Club. Last week I was nominated as a candidate for President, Vice President, and Secretary by other members of the club.
+
+In my opinion, regardless of who is president, every person in Computer Club has an equal voice. If I were to become president, I wouldn't be interested in making decisions outright without consulting anyone in the club. Actually, it would be the opposite, as I would want as much input from other club members as possible regarding any decision going forward.
+
+Why would I want to be president of Computer Club and what are the reasons should anyone vote for me? I joined Computer Club back in September of 2014 and it has been an unforgettable experience. During this school year I've been to every single meeting and I've been to countless Computer Club events over the past 1.5 years. I'm very active in this club and I'm on the IRC server frequently.
+
+After being in this club for a while, I'd like to contribute through a leadership role. If I were to be elected president, but even if I'm not, these key things are what I'd like to see introduced to the club:
+
+1. Make Computer Club more welcoming to new members.
+New members are one of the most important parts of this club. We must guarantee that new members are treated with the respect they deserve.
+
+2. Update the constitution.
+Many parts of the current constitution are outdated or vague. We should put forward an effort to address these issues and update anything necessary. Additionally, I think some form of outlined amendment process should be laid out for future Computer Club members so they do not run into the same issues we are currently facing.
+
+3. Create more events for Computer Club members.
+It's hard to say Computer Club does much outside from just being Computer Club right now. The two main events we currently hold are PLAN and CTFs. Aside from that, there are not many official events held by Computer Club. I think we should put towards an effort to come up with new ideas for members to have fun at Computer Club. I'm not referring to events as big as PLAN, but we could benefit from smaller, more focused events similar to Hackathons.
+
+As a president of Computer Club, I would run the club with fairness and respect to all members. Again, all members of Computer Club have an equal voice. No one in this club is better than anyone else and we are all striving to reach the same goal: teach others and learn about computers.
+
+On the topic of secretary, I believe this is one of my most proficient skills, making me a great candidate for secretary. With my highest typing speed at 120 WPM, I believe I could type out minutes at a quick pace with a great amount of detail. If you are interested as to what minutes might look like with me as secretary, here is an example based on PLAN minutes I took last year: https://github.com/ccowmu/minutes/blob/master/plan/20151113.md.
+
+Thank you for taking the time to read this, and feel free to contact me on IRC if you have any questions, comments, or concerns.

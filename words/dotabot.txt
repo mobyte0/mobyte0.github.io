@@ -1,0 +1,21 @@
+Recently I've been working on this IRC bot that can take a Dota 2 match number and it will look up the match on the Dota 2 API. It then returns stats about the match and will tell you the performances of each of the players from the match you requested. I made this bot in python and it's currently functioning as an IRC bot for quick reference on the Computer Club IRC. I wrote the function for looking up the matches through the API myself but the core code for the IRC bot (data bot) was created by my friend TheMind from Computer Club. Data bot originated from a project we worked on in Computer Club called botler, which was created to be a modular IRC bot that would have ease of creating new functions by simply dropping new scripts into the commands folder. Botler was a great project and I recommend you check it out at https://github.com/ccowmu/botler.
+
+Anyway, the bot I've been working on is called shopkeeper and it's two main API calls use the Dota 2 Match History WebAPI (http://dev.dota2.com/showthread.php?t=47115) and the Steam Web API (https://developer.valvesoftware.com/wiki/Steam_Web_API). The Dota 2 Match History WebAPI is used to get the main information about matches and the Steam Web API is used to get information about the players. In Dota 2, not all players give permission to look up their user information, so the Steam Web API may not always be used in every instance.
+
+In the current version of shopkeeper, here is what the sample output looks like:
+18:44 <@mobyte> shopkeeper: match 2322525923
+18:44 <shopkeeper> Match 2322525923 | Dire Victory | Match Duration: 0:49:06
+18:44 <shopkeeper> Team Radiant:
+18:44 <shopkeeper> Anonymous(Winter Wyvern)|KDA:4/12/9|LH/DN:33/4|Gold:283|XPM:271|GPM:209|HD/HH:6004/1687|TD:62
+18:44 <shopkeeper> NEW SUB HYPE!!!1!!(Weaver)|KDA:6/3/7|LH/DN:81/1|Gold:346|XPM:343|GPM:270|HD/HH:11611/0|TD:228
+18:44 <shopkeeper> Anonymous(Axe)|KDA:11/8/10|LH/DN:188/0|Gold:1457|XPM:435|GPM:373|HD/HH:13320/0|TD:20
+18:44 <shopkeeper> Anonymous(Sniper)|KDA:4/5/18|LH/DN:238/6|Gold:3125|XPM:446|GPM:428|HD/HH:18653/0|TD:168
+18:44 <shopkeeper> Anonymous(Troll Warlord)|KDA:1/12/8|LH/DN:102/2|Gold:752|XPM:252|GPM:219|HD/HH:3648/0|TD:185
+18:44 <shopkeeper> Team Dire:
+18:44 <shopkeeper> Zaskeu(Viper)|KDA:11/5/12|LH/DN:279/0|Gold:1389|XPM:523|GPM:571|HD/HH:17609/0|TD:8083
+18:44 <shopkeeper> frant!c(Storm Spirit)|KDA:12/1/18|LH/DN:317/4|Gold:2947|XPM:659|GPM:592|HD/HH:19734/84|TD:1164
+18:44 <shopkeeper> Voltron(Bristleback)|KDA:11/5/12|LH/DN:130/10|Gold:784|XPM:414|GPM:418|HD/HH:16517/0|TD:838
+18:44 <shopkeeper> mobyte(Dazzle)|KDA:2/6/30|LH/DN:62/11|Gold:160|XPM:410|GPM:346|HD/HH:4873/6371|TD:647
+18:44 <shopkeeper> stringy(Ogre Magi)|KDA:4/10/14|LH/DN:69/10|Gold:2498|XPM:392|GPM:340|HD/HH:11011/0|TD:894
+
+I'm thinking of upgrading this bot later to add some new features, such as returning items held by each player, but I think the current functionality hits the main essentials. Additionally, I think I'm going to make a write up later about how I accessed the APIs, in case anyone is interested in learning how I put together this project. So keep an eye out on that if you're interested in learning some more about accessing APIs with python. If you're interested in the source code of shopkeeper, check out this link: https://github.com/mobyte0/shopkeeper.

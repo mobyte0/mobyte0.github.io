@@ -1,0 +1,145 @@
+Slightly over a week ago, I worked on a small project called shopkeeper. You can check out the project here: https://github.com/mobyte0/shopkeeper. Basically, this was a very basic IRC bot that can take a Dota 2 match ID and return to you information about the match. I made this bot by adding on to an existing bot from a friend of mine called data bot. I didn't have any part in the creation of the core bot, so I will not be going over how the IRC bot itself works. However, this write-up is more to give you insight on how to access APIs with python.
+
+<code>
+from listeners import StdCommandListener
+import requests
+import datetime
+import json
+
+class EchoListener(StdCommandListener):
+    def __init__(self):
+        super().__init__("match")
+
+    def onCommand(self, bot, message, args):
+</code>
+
+This is how commands are initialized in data bot. The difference from standard commands is that I have imported requests, datetime, and json. Each of these packages are required for shopkeeper to function and you'll very highly likely need requests and json if you want to work with python APIs in the future. After the "super().__init__(", I put "match" as a name for the command I am creating. Then it is closed with parenthesis.
+
+<code>
+        with open('api_key.json') as f:
+            data = json.load(f)
+        api_key = data['key']
+</code>
+
+Here I am loading my API key from a file, which you get from Valve by logging in at http://steamcommunity.com/dev/apikey. After you receive your API key, load it into your script with a file. It is good practice to do this instead of directly pasting your API key into your code, as using services such as git can create security issues for you.
+
+<code>
+        match_id = args[0]
+        match_url = "https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id={}&key={}".format(match_id, api_key)
+        hero_url = "http://api.steampowered.com/IEconDOTA2_205790/GetHeroes/v0001/?language=en&key={}".format(api_key)
+</code>
+
+The match ID is obtained in the IRC bot through the first argument of the client. Of course, as I stated before, this is a very simple bot, so it does not have much error checking at the moment. The match ID is then inserted with the API key into the url that will be used for calling the API. This URL is used for anyone that wants to access details about a specific Dota 2 match, but will only return specific matches it is asked for and it will not work if you do not give it your API key. The second link is used for accessing the names of the heroes in Dota 2. In the match API url, it will return the hero information in numbers instead of the full localized name. Because of this, we will need to request the hero information so we can display it properly.
+
+<code>
+        r_hero = requests.get(hero_url)
+        r_hero_json = r_hero.json()
+        r = requests.get(match_url)
+        r_json = r.json()
+</code>
+
+We have now made a request to the match and the hero URLs through the powerful requests package. Using requests is somewhat similar to using curl in your terminal. If the URLs are able to be successfully pulled, then it will parse the data sent to us with the .json() function.
+
+<code>
+        if r_json['result']['radiant_win'] == 'True':
+            winner = "Radiant"
+        else:
+            winner = "Dire"
+</code>
+
+Now we are starting to parse some basic information from the json files we are currently holding. By using a simple view such as the one found at http://www.jsoneditoronline.org/, we can view a tree of the information provided to us by the API. Some things that stand out in particular that we want include the radiant_win, duration, and the account_id, KDA, last hits, denies, gold, XPM, GPM, hero damage, heroes healed, and tower damage of each player. To start off simple, we're going to get the winner of a match that has been requested. Inside our tree of json data, underneath the 'result' bracket, we have radiant_win. This will return a true if radiant wins and a false if dire wins. To check this in python, we sort the json data by using brackets through each layer that we are moving through. In this specific case we are looking directly at r_json['result']['radiant_win']. We then set the winner of the current match as Radiant if true is returned or dire if true is not returned.
+
+<code>
+        duration = r_json['result']['duration']
+        bot.respond(message, 'Match {} | {} Victory | Match Duration: {}'.format(match_id, winner, str(datetime.timedelta(seconds=duration))))
+</code>
+
+Next we will obtain the duration of the time of this match. The time in the API is given to us in seconds, but we may want it in a format such as Hours:Minutes:Seconds. To do this, we will use the package datetime which conveniently has a function to do this for us. As we are printing out our first line for the bot to return to IRC, we will print out the match ID, the winner of the match, and the length of the match. by using str(datetime.timedelta(seconds=duration)), we are using the function in datetime.timedelta to convert our seconds into hours, minutes, and seconds, and then str() to convert that information given by datetime into a readable string.
+
+<code>
+        player_id = []
+        hero_id = []
+        gold_id = []
+        kda_id = []
+        cs_id = []
+        xpm_id = []
+        gpm_id = []
+        hdhh_id = []
+        td_id = []
+</code>
+
+We are creating these empty arrays to hold the information for each player that we would like to obtain. Next we will be creating a loop to obtain all of this information we need.
+
+<code>
+        for x in range(0, 10):
+</code>
+
+This is a start of a loop that will go through each of the 10 players to get the information we need.
+
+<code>
+            if r_json['result']['players'][x]['account_id'] == 4294967295:
+                player_id.append("Anonymous")
+            elif r_json['result']['players'][x]['account_id'] != 4294967295:
+                temp_player_id = r_json['result']['players'][x]['account_id'] + 76561197960265728
+</code>
+
+Our first step is to identify the names of each of the players in the match. Later we will get the actual names, but first we need their Steam ID. In the Dota 2 API, it gives us the 32-bit ID. However, if the player is not publicly showing their name, it will appear as 4294967295. In that case, we will check for that first and label it as Anonymous if they are not showing their match information. In any other case, we will take their 32-bit ID and turn it into a 64-bit ID by simply adding the number 76561197960265728. The 64-bit ID must be obtained in order to use the Steam Web API to find their username.
+
+<code>
+                player_url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={}&steamids={}".format(api_key, temp_player_id)
+                r2 = requests.get(player_url)
+                r2_json = r2.json()
+</code>
+
+Similar to before, we are making an API call but this time to the Steam Web API. We do not need another API key since the same one works for all of Valve's APIs. Like the Match and Hero information, we will make a request to the URL and turn it into json data.
+
+<code>
+                player_id.append(r2_json['response']['players'][0]['personaname'])
+</code>
+
+We are taking the player name and appending it to a list for easy access. The personaname is the only thing we will need from this API request, but it can be read in the same way as the previous request.
+
+<code>
+            for y in range(0, 111):
+                if r_hero_json['result']['heroes'][y]['id'] == r_json['result']['players'][x]['hero_id']:
+                    hero_id.append(r_hero_json['result']['heroes'][y]['localized_name'])
+</code>
+
+Here, we create another loop to go through all 111 of the heroes in Dota 2 so we can determine which hero the selected player is playing. Do not simply check r_hero_json['result']['heroes'][id], as each hero is indexed differently and the index number in the Hero API does not always match the number from the Match API. To find the correct hero, we must go through each item in the Hero API and compare it. Then, if it matches, we will append it to our hero_id list.
+
+<code>
+            kills = r_json['result']['players'][x]['kills']
+            deaths = r_json['result']['players'][x]['deaths']
+            assists = r_json['result']['players'][x]['assists']
+            kda_id.append("{}/{}/{}".format(kills, deaths, assists))
+            cs = r_json['result']['players'][x]['last_hits']
+            dn = r_json['result']['players'][x]['denies']
+            cs_id.append("{}/{}".format(cs,dn))
+            xpm_id.append(r_json['result']['players'][x]['xp_per_min'])
+            gpm_id.append(r_json['result']['players'][x]['gold_per_min'])
+            hd = r_json['result']['players'][x]['hero_damage']
+            hh = r_json['result']['players'][x]['hero_healing']
+            hdhh_id.append("{}/{}".format(hd, hh))
+            td_id.append(r_json['result']['players'][x]['tower_damage'])
+</code>
+
+Next, we will go through all of the basic information: kills, deaths, assists, creep score, denies, XP per minute, gold per minute, hero damage, hero healing, and tower damage. All of these are in simple integers so they are simple to access and append. These are all accessed in the same way as the previous items. To save room on formatting, I've made the KDA, CS and Denies, and Hero Damage and Hero Healing into a string displaying a ratio.
+
+<code>
+        bot.respond(message, "Team Radiant:")
+        for x in range(0, 5):
+            bot.respond(message, "{}({})|KDA:{}|LH/DN:{}|Gold:{}|XPM:{}|GPM:{}|HD/HH:{}|TD:{}".format(player_id[x], hero_id[x], kda_id[x], cs_id[x], gold_id[x], xpm_id[x], gpm_id[x], hdhh_id[x], td_id[x]))
+        bot.respond(message, "Team Dire:")
+        for x in range(5, 10):
+            bot.respond(message, "{}({})|KDA:{}|LH/DN:{}|Gold:{}|XPM:{}|GPM:{}|HD/HH:{}|TD:{}".format(player_id[x], hero_id[x], kda_id[x], cs_id[x], gold_id[x], xpm_id[x], gpm_id[x], hdhh_id[x], td_id[x]))
+</code>
+
+Here at the final couple lines, we will print out all of the information we have. In the Match API, the first 5 players are the players on the Radiant team and the next 5 are on the Dire team. All you have to do is cycle through each one and print out the matching information.
+
+That concludes how I created the shopkeeper bot. Below are some links I found useful while creating this bot and may help give you some insight on how to do more with the tools given. If you have any questions feel free to ask me on IRC or send me a message at any place I can be reached.
+
+http://dev.dota2.com/showthread.php?t=47115
+http://steamcommunity.com/dev/apikey
+http://www.jsoneditoronline.org/
+http://dev.dota2.com/showthread.php?t=58317
+http://docs.python-requests.org/

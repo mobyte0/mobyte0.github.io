@@ -68,7 +68,7 @@ Next we will obtain the duration of the time of this match. The time in the API 
         td_id = []
 </code>
 
-We are creating these empty arrays to hold the information for each player that we would like to obtain. Next we will be creating a loop to obtain all of this information we need.
+We are creating these empty lists to hold the information for each player that we would like to obtain. Next we will be creating a loop to obtain all of this information we need.
 
 <code>
         for x in range(0, 10):

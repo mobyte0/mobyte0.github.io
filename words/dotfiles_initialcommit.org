@@ -1,0 +1,35 @@
+* dotfiles - Initial Commit
+
+By this point, I've used emacs for maybe about 1.5 years. Aside from that, I've used \*nix for some time now, maybe 8 years? Hard to tell, but to put a long story short, let's talk about *dotfiles*.
+
+To configure emacs and the other \*nix tools I use, using these dotfiles makes it a lot easier to have the same setup across multiple computers. For whatever reason, I've just been using some awful method of copy-pasting snippets through Dropbox. Time to put an end to that and make my setup across multiple machines more consistent. In order to set up this repository, I'm using GitHub to hold my repository for the time being and I'm using GNU Stow to manage the dotfiles themselves.
+
+Explaining GNU Stow at this point is just overdoing it since there are /plenty/ of resources out there for explaining this method. In a nutshell, all I have done is I have created a dotfiles directory in my =~= directory and then GNU Stow creates links to them in my =~=.
+
+I've just started using GNU Stow recently, so I don't know all about its functionality yet. However, at a basic level, I am able to type =$ stow emacs= inside my dotfiles directory and then it will link the =.emacs.d= directory to my =~= for me. Then after that, I have just wrapped it all wrapped up with git. This should hopefully help me keep track of any changes.
+
+The main reason I've set up this repository is because my emacs configuration has become a little messy. After the experience I've had with the many emacs packages and what spacemacs has to offer, I'm going to start with a new configuration from scratch and I'll see what I can come up with. Additionally, while using MELPA has been handy in helping me install new packages easily, I'm going to try using packages from source this time around to see if I enjoy the experience more.
+
+The current version of my dotfiles repository holding emacs holds some of my essential configurations and packages. Some of the packages I have now include =helm=, =nlinum=, =smart-tabs-mode=, =magit=, and some preferred color themes. Some of the defaults I have set are to show line numbers, a more minimal interface, and setting up indentation. Really basic stuff. We'll see how it goes later as I keep tweaking things.
+
+So basically, here are some ideas for the dotfiles that I want to set up:
+
+#+BEGIN_SRC
+~/.emacs.d/              - to hold my emacs config and lisp packages
+~/.config/fish/          - for fish configuration and aliases
+~/.Xresources            - color themes
+~/.nano/                 - nano configuration, used as a backup for when emacs isn't available
+~/.startpage/            - browser start page links
+~/.wallpaper/            - desktop wallpaper images
+~/.tmux/                 - tmux configurations
+~/.config/ranger/        - ranger configurations, set up to use emacs keybindings
+~/.git/                  - global ignores, other git stuff
+~/.config/neofetch/      - neofetch preset
+~/.scrot/                - screenshots
+~/.scripts/              - useful scripts
+~/.iterm/                - iterm configurations for macos
+#+END_SRC
+
+I'll probably also eventually see about setting up a music player configuration, so that should come later. For now, at the time of writing this, the commit in my dotfiles repository is =f6093b6bc3e6b73610cb3e75e0a11e923bf7f1ac= and it can be found [[https://github.com/mobyte0/dotfiles][on GitHub]].
+
+[2017-06-26 Mon]

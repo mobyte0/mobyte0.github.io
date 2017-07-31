@@ -1,0 +1,19 @@
+* dotfiles - git submodules
+Lately in my dotfiles updates, I've been having quite an interesting plight with git submodules and the way they can be updated. Essentially, I couldn't figure out at first why I couldn't update my git submodules in my dotfiles. Additionally, if I were to change anything, it would make it even harder to upgrade. After doing some research I believe I have figured out a way to accomplish this in a way that makes me happy. I made a (one-line LUL) bash script to handle this because *@@html:<font color = "#789922">@@>implying i'm going to remember some complicated git command@@html:</font>@@*. I'll probably add some more functionality to this later to make it more than just a glorified alias. Anyway, if you're dying to figure out my solution to this problem, here is the current line I have to update all of my submodules recursively:
+
+#+BEGIN_SRC bash
+git submodule update --init --recusrive --remote /home/$USER/dotfiles/
+#+END_SRC
+
+Of course, this is assuming that you are holding your dotfiles in ~~/dotfiles/~ as I have, but I'll probably figure out this functionality later. Anyway, that's all you need to run in order to update your submodules. However, if you have run into a problem similar to mine in which you cannot update using that line of bash, there is a solution for you. Thanks to StackOverflow user [[https://stackoverflow.com/users/6309/vonc][VonC]], I found out how to cleanly remove a submodule entirely. [[https://stackoverflow.com/a/16162000/7873568][His full solution and description can be found here]]. The lines are as follows:
+
+#+BEGIN_SRC bash
+git submodule deinit -f -- a/submodule
+rm -rf .git/modules/a/submodule
+
+git rm -f a/submodule
+#+END_SRC
+
+After that, simply reupdate your ~.gitmodules~ file and reclone the repository to where you want it. That should hopefully solve all of your problems with git submodules being a pain. After wrapping all of that up, you can add, update, commit, and push to your heart's content. That's all I have to say until there are more interesting updates to mention.
+
+<2017-07-31 Mon 12:46>
